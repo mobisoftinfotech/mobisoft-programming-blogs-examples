@@ -33,6 +33,9 @@ Automated code review MCP server with technology-specific checklists and real-ti
 2. **Install dependencies:**
    ```bash
    # Using uv (recommended)
+   uv sync 
+   
+   #or 
    uv pip install -e .
 
    # Or using pip
@@ -45,20 +48,46 @@ Automated code review MCP server with technology-specific checklists and real-ti
    - **Mac**: `~/Library/Application Support/Claude/claude_desktop_config.json`
    - **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
 
-   Add the MCP server:
+   Add the MCP server for windows:
    ```json
    {
      "mcpServers": {
-       "code-reviewer": {
-         "command": "uv",
-         "args": ["run", "python", "-m", "main"],
-         "cwd": "/absolute/path/to/mcp-code-reviewer"
-       }
-     }
+      "mcp-code-reviewer": {
+        "command": "uv",
+        "args": [
+          "--directory",
+          "C:\\Users\\YourUsername\\code\\mcp-code-reviewer",
+          "run",
+          "mcp-code-reviewer"
+        ],
+        "env": {
+          "DANGEROUSLY_OMIT_AUTH": "true"
+        }
+      }
+    }
    }
    ```
+   Add the MCP server for windows:
+   ```json
+   {
+     "mcpServers": {
+      "mcp-code-reviewer": {
+        "command": "uv",
+        "args": [
+          "--directory",
+          "/Users/yourname/code/mcp-code-reviewer",
+          "run",
+          "mcp-code-reviewer"
+        ],
+        "env": {
+          "DANGEROUSLY_OMIT_AUTH": "true"
+        }
+      }
+     }
+    }
+   ```
 
-4. **Restart Claude Desktop**
+4. **Restart Claude Desktop, End from task manager**
 
 ## Usage
 
@@ -326,4 +355,4 @@ MIT License
 
 ## Author
 
-Created with Claude Code
+Created by Mobisoft Infotech Pvt Ltd
