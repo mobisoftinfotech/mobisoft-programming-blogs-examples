@@ -1,0 +1,157 @@
+technology: javascript
+description: Code review checklist for JavaScript/TypeScript projects
+
+categories:
+  - name: Security
+    items:
+      - id: SEC-001
+        description: No hardcoded credentials or API keys
+        validator: check_hardcoded_secrets
+        severity: critical
+        patterns:
+          - "password\\s*[:=]\\s*[\"'][^\"']+[\"']"
+          - "apiKey\\s*[:=]\\s*[\"'][^\"']+[\"']"
+          - "secret\\s*[:=]\\s*[\"'][^\"']+[\"']"
+          - "token\\s*[:=]\\s*[\"'][^\"']+[\"']"
+
+      - id: SEC-002
+        description: No eval() usage
+        validator: check_dangerous_functions
+        severity: critical
+        patterns:
+          - "\\beval\\("
+
+      - id: SEC-003
+        description: Avoid innerHTML (XSS vulnerability)
+        validator: check_xss_vulnerabilities
+        severity: critical
+        patterns:
+          - "\\.innerHTML\\s*="
+
+      - id: SEC-004
+        description: Use strict mode
+        validator: check_strict_mode
+        severity: warning
+        patterns:
+          - "^[\"']use strict[\"']"
+
+      - id: SEC-005
+        description: No sensitive data in localStorage
+        validator: check_localstorage_usage
+        severity: warning
+        patterns:
+          - "localStorage\\.setItem.*(?:password|token|secret|key)"
+
+  - name: Code Quality
+    items:
+      - id: QA-001
+        description: Functions should be under 50 lines
+        validator: check_function_length
+        severity: warning
+        threshold: 50
+
+      - id: QA-002
+        description: Use const/let instead of var
+        validator: check_var_usage
+        severity: warning
+        patterns:
+          - "\\bvar\\s+"
+
+      - id: QA-003
+        description: Proper error handling (try-catch for async)
+        validator: check_error_handling
+        severity: warning
+
+      - id: QA-004
+        description: No console.log in production code
+        validator: check_console_statements
+        severity: info
+        patterns:
+          - "console\\.log\\("
+          - "console\\.debug\\("
+
+      - id: QA-005
+        description: Use async/await over raw promises
+        validator: check_async_usage
+        severity: info
+
+  - name: Performance
+    items:
+      - id: PERF-001
+        description: Avoid nested loops with high complexity
+        validator: check_loop_performance
+        severity: warning
+
+      - id: PERF-002
+        description: Use React.memo for expensive components
+        validator: check_react_optimization
+        severity: info
+        frameworks: ["react"]
+
+      - id: PERF-003
+        description: Avoid unnecessary re-renders
+        validator: check_react_rerenders
+        severity: info
+        frameworks: ["react"]
+
+  - name: Best Practices
+    items:
+      - id: BP-001
+        description: Use arrow functions consistently
+        validator: check_arrow_functions
+        severity: info
+
+      - id: BP-002
+        description: Destructure props and state
+        validator: check_destructuring
+        severity: info
+        frameworks: ["react"]
+
+      - id: BP-003
+        description: Package.json exists
+        validator: check_package_json
+        severity: critical
+        files: ["package.json"]
+
+      - id: BP-004
+        description: ESLint configuration exists
+        validator: check_eslint_config
+        severity: info
+        files: [".eslintrc", ".eslintrc.js", ".eslintrc.json"]
+
+      - id: BP-005
+        description: No magic numbers
+        validator: check_magic_numbers
+        severity: info
+
+  - name: React Specific
+    items:
+      - id: REACT-001
+        description: Use functional components over class components
+        validator: check_component_type
+        severity: info
+        frameworks: ["react"]
+
+      - id: REACT-002
+        description: Proper key prop in lists
+        validator: check_react_keys
+        severity: warning
+        frameworks: ["react"]
+
+      - id: REACT-003
+        description: No inline function definitions in JSX
+        validator: check_inline_functions
+        severity: info
+        frameworks: ["react"]
+
+  - name: Testing
+    items:
+      - id: TEST-001
+        description: Test files exist
+        validator: check_test_files
+        severity: info
+        patterns:
+          - "*.test.js"
+          - "*.spec.js"
+          - "*.test.ts"
+          - "*.spec.ts"

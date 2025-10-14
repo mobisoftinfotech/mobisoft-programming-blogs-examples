@@ -1,0 +1,21 @@
+[project]
+name = "mcp-code-reviewer"
+version = "0.1.0"
+description = "MCP server for automated code review with technology-specific checklists"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "mcp[cli]>=1.16.0",
+    "pyyaml>=6.0",
+    "pathspec>=0.11.0",
+]
+
+[project.scripts]
+mcp-code-reviewer = "main:mcp.run"
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

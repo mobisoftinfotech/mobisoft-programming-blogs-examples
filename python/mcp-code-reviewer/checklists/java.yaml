@@ -1,0 +1,149 @@
+technology: java
+description: Code review checklist for Java projects
+
+categories:
+  - name: Security
+    items:
+      - id: SEC-001
+        description: No hardcoded credentials
+        validator: check_hardcoded_secrets
+        severity: critical
+        patterns:
+          - 'password\s*=\s*"[^"]+"'
+          - 'apiKey\s*=\s*"[^"]+"'
+          - 'secret\s*=\s*"[^"]+"'
+
+      - id: SEC-002
+        description: SQL injection prevention (use PreparedStatement)
+        validator: check_sql_injection
+        severity: critical
+        patterns:
+          - 'Statement.*executeQuery.*\+'
+
+      - id: SEC-003
+        description: Proper exception handling (no empty catch blocks)
+        validator: check_exception_handling
+        severity: warning
+        patterns:
+          - 'catch\s*\([^)]+\)\s*\{\s*\}'
+
+      - id: SEC-004
+        description: Use secure random number generation
+        validator: check_random_usage
+        severity: warning
+        patterns:
+          - 'new Random\('
+
+      - id: SEC-005
+        description: Validate user input
+        validator: check_input_validation
+        severity: critical
+
+  - name: Code Quality
+    items:
+      - id: QA-001
+        description: Methods should be under 50 lines
+        validator: check_method_length
+        severity: warning
+        threshold: 50
+
+      - id: QA-002
+        description: Proper naming conventions (camelCase)
+        validator: check_naming_conventions
+        severity: info
+
+      - id: QA-003
+        description: Classes should have single responsibility
+        validator: check_class_size
+        severity: warning
+        threshold: 500
+
+      - id: QA-004
+        description: Avoid nested if statements (max 3 levels)
+        validator: check_nesting_depth
+        severity: warning
+        threshold: 3
+
+      - id: QA-005
+        description: Use final for immutable variables
+        validator: check_final_usage
+        severity: info
+
+  - name: Performance
+    items:
+      - id: PERF-001
+        description: Use StringBuilder for string concatenation in loops
+        validator: check_string_concatenation
+        severity: warning
+
+      - id: PERF-002
+        description: Proper collection usage (ArrayList vs LinkedList)
+        validator: check_collection_usage
+        severity: info
+
+      - id: PERF-003
+        description: Close resources properly (try-with-resources)
+        validator: check_resource_management
+        severity: critical
+
+  - name: Best Practices
+    items:
+      - id: BP-001
+        description: Use annotations (@Override, @Deprecated)
+        validator: check_annotations
+        severity: info
+
+      - id: BP-002
+        description: Avoid magic numbers (use constants)
+        validator: check_magic_numbers
+        severity: info
+
+      - id: BP-003
+        description: Proper Javadoc for public methods
+        validator: check_javadoc
+        severity: info
+
+      - id: BP-004
+        description: Use Optional for nullable returns
+        validator: check_optional_usage
+        severity: info
+
+      - id: BP-005
+        description: Follow SOLID principles
+        validator: check_solid_principles
+        severity: info
+
+  - name: Spring Boot Specific
+    items:
+      - id: SPRING-001
+        description: Proper dependency injection (constructor injection)
+        validator: check_dependency_injection
+        severity: info
+        frameworks: ['spring']
+
+      - id: SPRING-002
+        description: Use @Transactional appropriately
+        validator: check_transactional_usage
+        severity: warning
+        frameworks: ['spring']
+
+      - id: SPRING-003
+        description: RESTful endpoint naming conventions
+        validator: check_rest_conventions
+        severity: info
+        frameworks: ['spring']
+
+  - name: Testing
+    items:
+      - id: TEST-001
+        description: Test files exist
+        validator: check_test_files
+        severity: info
+        patterns:
+          - '*Test.java'
+          - '*Tests.java'
+
+      - id: TEST-002
+        description: Use JUnit assertions
+        validator: check_junit_usage
+        severity: info

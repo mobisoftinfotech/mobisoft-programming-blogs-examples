@@ -1,0 +1,135 @@
+technology: python
+description: Code review checklist for Python projects
+
+categories:
+  - name: Security
+    items:
+      - id: SEC-001
+        description: No hardcoded credentials or API keys
+        validator: check_hardcoded_secrets
+        severity: critical
+        patterns:
+          - "password\\s*=\\s*[\"'][^\"']+[\"']"
+          - "api_key\\s*=\\s*[\"'][^\"']+[\"']"
+          - "secret\\s*=\\s*[\"'][^\"']+[\"']"
+          - "token\\s*=\\s*[\"'][^\"']+[\"']"
+
+      - id: SEC-002
+        description: SQL injection prevention (use parameterized queries)
+        validator: check_sql_injection
+        severity: critical
+        patterns:
+          - "execute\\([^)]*%[^)]*\\)"
+          - "execute\\([^)]*\\+[^)]*\\)"
+          - "execute\\([^)]*f[\"'][^\"']*\\{[^}]*\\}[^\"']*[\"']\\)"
+
+      - id: SEC-003
+        description: No eval() or exec() usage
+        validator: check_dangerous_functions
+        severity: critical
+        patterns:
+          - "\\beval\\("
+          - "\\bexec\\("
+
+      - id: SEC-004
+        description: Secure random number generation
+        validator: check_random_usage
+        severity: warning
+        patterns:
+          - "import random(?!\\s+import\\s+SystemRandom)"
+
+      - id: SEC-005
+        description: DEBUG mode disabled in production
+        validator: check_debug_mode
+        severity: critical
+        files: ['settings.py', 'config.py', '.env']
+        patterns:
+          - "DEBUG\\s*=\\s*True"
+
+  - name: Code Quality
+    items:
+      - id: QA-001
+        description: Functions should be under 50 lines
+        validator: check_function_length
+        severity: warning
+        threshold: 50
+
+      - id: QA-002
+        description: No commented-out code blocks
+        validator: check_commented_code
+        severity: info
+        patterns:
+          - "^\\s*#.*\\b(def|class|if|for|while)\\b"
+
+      - id: QA-003
+        description: Proper exception handling (no bare except)
+        validator: check_exception_handling
+        severity: warning
+        patterns:
+          - "except\\s*:"
+
+      - id: QA-004
+        description: Type hints for function parameters
+        validator: check_type_hints
+        severity: info
+
+      - id: QA-005
+        description: Docstrings for public functions and classes
+        validator: check_docstrings
+        severity: info
+
+  - name: Performance
+    items:
+      - id: PERF-001
+        description: No inefficient list comprehensions in loops
+        validator: check_loop_performance
+        severity: warning
+
+      - id: PERF-002
+        description: Use generators for large datasets
+        validator: check_generator_usage
+        severity: info
+
+  - name: Best Practices
+    items:
+      - id: BP-001
+        description: Follow PEP 8 naming conventions
+        validator: check_naming_conventions
+        severity: info
+
+      - id: BP-002
+        description: No global variables
+        validator: check_global_variables
+        severity: warning
+        patterns:
+          - "^[A-Z_]+\\s*=\\s*(?!.*\\bNone\\b)(?!.*\\bTrue\\b)(?!.*\\bFalse\\b)"
+
+      - id: BP-003
+        description: Use context managers for file operations
+        validator: check_context_managers
+        severity: warning
+        patterns:
+          - "open\\([^)]+\\)(?!\\s*as\\s+)"
+
+      - id: BP-004
+        description: Requirements file exists
+        validator: check_requirements_file
+        severity: info
+        files: ['requirements.txt', 'pyproject.toml', 'Pipfile']
+
+  - name: Testing
+    items:
+      - id: TEST-001
+        description: Test files exist
+        validator: check_test_files
+        severity: info
+        patterns:
+          - 'test_*.py'
+          - '*_test.py'
+
+      - id: TEST-002
+        description: No print statements (use logging)
+        validator: check_print_statements
+        severity: info
+        patterns:
+          - "\\bprint\\("
