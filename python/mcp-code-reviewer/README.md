@@ -4,17 +4,17 @@ Automated code review MCP server with technology-specific checklists and real-ti
 
 ## Features
 
-- 🔍 **Auto-detect technology stack** from project files
-- 📋 **Technology-specific checklists** for Python, JavaScript/TypeScript, and Java
-- ⚡ **Real-time progress tracking** with pass/fail/skip counts
-- 🎯 **Comprehensive checks** covering:
+-  **Auto-detect technology stack** from project files
+-  **Technology-specific checklists** for Python, JavaScript/TypeScript, and Java
+-  **Real-time progress tracking** with pass/fail/skip counts
+-  **Comprehensive checks** covering:
   - Security vulnerabilities
   - Code quality issues
   - Performance problems
   - Best practices
   - Testing coverage
-- 📊 **Detailed reporting** with file locations and line numbers
-- 🎨 **Severity levels** (critical, warning, info)
+-  **Detailed reporting** with file locations and line numbers
+-  **Severity levels** (critical, warning, info)
 
 ## Installation
 
