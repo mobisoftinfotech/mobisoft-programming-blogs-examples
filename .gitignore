@@ -339,6 +339,8 @@ downloads/
 eggs/
 .eggs/
 lib/
+# Exception: Flutter/Dart lib/ folder contains source code and should be tracked
+!mobile/**/lib/
 lib64/
 parts/
 sdist/
