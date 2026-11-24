@@ -1,0 +1,228 @@
+[
+  {
+    "version": "1.0",
+    "createSurface": {
+      "surfaceId": "hotels",
+      "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json"
+    }
+  },
+  {
+    "version": "1.0",
+    "updateComponents": {
+      "surfaceId": "hotels",
+      "components": [
+        {
+          "id": "root",
+          "component": "Column",
+          "children": [
+            "h_title",
+            "h_sub",
+            "h_list"
+          ]
+        },
+        {
+          "id": "h_title",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "### ${/hotels/title}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "h_sub",
+          "component": "Text",
+          "text": {
+            "@path": "/hotels/subtitle"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "h_list",
+          "component": "Column",
+          "children": {
+            "componentId": "h_card",
+            "path": "/hotels/items"
+          }
+        },
+        {
+          "id": "h_card",
+          "component": "Card",
+          "child": "h_row"
+        },
+        {
+          "id": "h_row",
+          "component": "Row",
+          "children": [
+            "h_info",
+            "h_price",
+            "h_select"
+          ],
+          "align": "center"
+        },
+        {
+          "id": "h_info",
+          "component": "Column",
+          "children": [
+            "h_name",
+            "h_stars",
+            "h_area",
+            "h_rating"
+          ],
+          "weight": 2
+        },
+        {
+          "id": "h_name",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "#### ${name}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "h_stars",
+          "component": "Text",
+          "text": {
+            "@path": "stars"
+          }
+        },
+        {
+          "id": "h_area",
+          "component": "Text",
+          "text": {
+            "@path": "area"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "h_rating",
+          "component": "Text",
+          "text": {
+            "@path": "rating"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "h_price",
+          "component": "Column",
+          "children": [
+            "h_nightly",
+            "h_total",
+            "h_total_note"
+          ],
+          "align": "end",
+          "weight": 1
+        },
+        {
+          "id": "h_nightly",
+          "component": "Text",
+          "text": {
+            "@path": "nightly"
+          }
+        },
+        {
+          "id": "h_total",
+          "component": "Text",
+          "text": {
+            "@call": "formatCurrency",
+            "args": {
+              "value": {
+                "@path": "total"
+              },
+              "currency": "USD",
+              "decimals": 0
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "h_total_note",
+          "component": "Text",
+          "text": {
+            "@path": "totalNote"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "h_select",
+          "component": "Button",
+          "child": "h_select_label",
+          "action": {
+            "event": {
+              "name": "select_hotel",
+              "context": {
+                "hotelId": {
+                  "@path": "id"
+                }
+              }
+            }
+          },
+          "variant": "primary"
+        },
+        {
+          "id": "h_select_label",
+          "component": "Text",
+          "text": "Select"
+        }
+      ]
+    }
+  },
+  {
+    "version": "1.0",
+    "updateDataModel": {
+      "surfaceId": "hotels",
+      "path": "/hotels",
+      "value": {
+        "title": "🏨 Hotels in Lisbon",
+        "subtitle": "2 nights · 2 guests · flexible dates",
+        "items": [
+          {
+            "id": "HT-LIS-3",
+            "name": "Budget House Bairro Alto",
+            "stars": "★★☆☆☆",
+            "area": "📍 Bairro Alto",
+            "rating": "7.9 · Good",
+            "nightly": "$93 / night",
+            "total": 186,
+            "totalNote": "total for 2 nights"
+          },
+          {
+            "id": "HT-LIS-2",
+            "name": "Comfort Inn Baixa",
+            "stars": "★★★☆☆",
+            "area": "📍 Baixa",
+            "rating": "7.9 · Good",
+            "nightly": "$132 / night",
+            "total": 264,
+            "totalNote": "total for 2 nights"
+          },
+          {
+            "id": "HT-LIS-1",
+            "name": "Boutique Residence Alfama",
+            "stars": "★★★★☆",
+            "area": "📍 Alfama",
+            "rating": "9.4 · Exceptional",
+            "nightly": "$154 / night",
+            "total": 308,
+            "totalNote": "total for 2 nights"
+          },
+          {
+            "id": "HT-LIS-4",
+            "name": "Luxury Residence Belém",
+            "stars": "★★★★★",
+            "area": "📍 Belém",
+            "rating": "8.3 · Very good",
+            "nightly": "$272 / night",
+            "total": 544,
+            "totalNote": "total for 2 nights"
+          }
+        ]
+      }
+    }
+  }
+]

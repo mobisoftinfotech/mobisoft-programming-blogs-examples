@@ -1,0 +1,601 @@
+[
+  {
+    "version": "1.0",
+    "createSurface": {
+      "surfaceId": "itinerary",
+      "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json"
+    }
+  },
+  {
+    "version": "1.0",
+    "updateComponents": {
+      "surfaceId": "itinerary",
+      "components": [
+        {
+          "id": "root",
+          "component": "Column",
+          "children": [
+            "it_header",
+            "it_stops",
+            "it_days",
+            "it_tips",
+            "it_refine"
+          ]
+        },
+        {
+          "id": "it_header",
+          "component": "Card",
+          "child": "it_header_col"
+        },
+        {
+          "id": "it_header_col",
+          "component": "Column",
+          "children": [
+            "it_title",
+            "it_summary",
+            "it_meta",
+            "it_budget"
+          ]
+        },
+        {
+          "id": "it_title",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "## ${/itinerary/title}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "it_summary",
+          "component": "Text",
+          "text": {
+            "@path": "/itinerary/summary"
+          }
+        },
+        {
+          "id": "it_meta",
+          "component": "Row",
+          "children": [
+            "it_length",
+            "it_route",
+            "it_travelers"
+          ],
+          "justify": "spaceBetween"
+        },
+        {
+          "id": "it_length",
+          "component": "Text",
+          "text": {
+            "@path": "/itinerary/lengthLabel"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "it_route",
+          "component": "Text",
+          "text": {
+            "@path": "/itinerary/routeLabel"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "it_travelers",
+          "component": "Text",
+          "text": {
+            "@path": "/itinerary/travelersLabel"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "it_budget",
+          "component": "Row",
+          "children": [
+            "it_budget_pre",
+            "it_budget_value",
+            "it_budget_post"
+          ],
+          "align": "center"
+        },
+        {
+          "id": "it_budget_pre",
+          "component": "Text",
+          "text": "##### 💰 About"
+        },
+        {
+          "id": "it_budget_value",
+          "component": "Text",
+          "text": {
+            "@call": "formatCurrency",
+            "args": {
+              "value": {
+                "@path": "/itinerary/budget"
+              },
+              "currency": "USD",
+              "decimals": 0
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "it_budget_post",
+          "component": "Text",
+          "text": "per person, excluding flights",
+          "variant": "caption"
+        },
+        {
+          "id": "it_stops",
+          "component": "Column",
+          "children": [
+            "it_stops_title",
+            "it_stops_list"
+          ]
+        },
+        {
+          "id": "it_stops_title",
+          "component": "Text",
+          "text": "#### Where you'll stay"
+        },
+        {
+          "id": "it_stops_list",
+          "component": "Column",
+          "children": {
+            "componentId": "it_stop",
+            "path": "/itinerary/stops"
+          }
+        },
+        {
+          "id": "it_stop",
+          "component": "Row",
+          "children": [
+            "it_stop_label",
+            "it_stop_btn"
+          ],
+          "align": "center"
+        },
+        {
+          "id": "it_stop_label",
+          "component": "Text",
+          "text": {
+            "@path": "label"
+          },
+          "weight": 1
+        },
+        {
+          "id": "it_stop_btn",
+          "component": "Button",
+          "child": "it_stop_btn_label",
+          "action": {
+            "event": {
+              "name": "find_hotels",
+              "context": {
+                "city": {
+                  "@path": "city"
+                },
+                "nights": {
+                  "@path": "nights"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "it_stop_btn_label",
+          "component": "Text",
+          "text": "🏨 Find hotels"
+        },
+        {
+          "id": "it_days",
+          "component": "Column",
+          "children": {
+            "componentId": "it_day",
+            "path": "/itinerary/days"
+          }
+        },
+        {
+          "id": "it_day",
+          "component": "Card",
+          "child": "it_day_col"
+        },
+        {
+          "id": "it_day_col",
+          "component": "Column",
+          "children": [
+            "it_day_head",
+            "it_day_title",
+            "it_day_divider",
+            "it_acts"
+          ]
+        },
+        {
+          "id": "it_day_head",
+          "component": "Row",
+          "children": [
+            "it_day_label",
+            "it_day_loc"
+          ],
+          "align": "center",
+          "justify": "spaceBetween"
+        },
+        {
+          "id": "it_day_label",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "#### ${label}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "it_day_loc",
+          "component": "Text",
+          "text": {
+            "@path": "location"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "it_day_title",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "##### ${title}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "it_day_divider",
+          "component": "Divider"
+        },
+        {
+          "id": "it_acts",
+          "component": "Column",
+          "children": {
+            "componentId": "it_act",
+            "path": "activities"
+          }
+        },
+        {
+          "id": "it_act",
+          "component": "Row",
+          "children": [
+            "it_act_slot",
+            "it_act_body",
+            "it_act_cost"
+          ],
+          "align": "start"
+        },
+        {
+          "id": "it_act_slot",
+          "component": "Text",
+          "text": {
+            "@path": "slot"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "it_act_body",
+          "component": "Column",
+          "children": [
+            "it_act_title",
+            "it_act_desc"
+          ],
+          "weight": 1
+        },
+        {
+          "id": "it_act_title",
+          "component": "Text",
+          "text": {
+            "@path": "title"
+          }
+        },
+        {
+          "id": "it_act_desc",
+          "component": "Text",
+          "text": {
+            "@path": "description"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "it_act_cost",
+          "component": "Text",
+          "text": {
+            "@path": "cost"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "it_tips",
+          "component": "Card",
+          "child": "it_tips_col"
+        },
+        {
+          "id": "it_tips_col",
+          "component": "Column",
+          "children": [
+            "it_tips_title",
+            "it_tips_list"
+          ]
+        },
+        {
+          "id": "it_tips_title",
+          "component": "Text",
+          "text": "#### 💡 Good to know"
+        },
+        {
+          "id": "it_tips_list",
+          "component": "Column",
+          "children": {
+            "componentId": "it_tip",
+            "path": "/itinerary/tips"
+          }
+        },
+        {
+          "id": "it_tip",
+          "component": "Text",
+          "text": {
+            "@path": "text"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "it_refine",
+          "component": "Card",
+          "child": "it_refine_col"
+        },
+        {
+          "id": "it_refine_col",
+          "component": "Column",
+          "children": [
+            "it_refine_title",
+            "it_quick",
+            "it_custom"
+          ]
+        },
+        {
+          "id": "it_refine_title",
+          "component": "Text",
+          "text": "#### Not quite right?"
+        },
+        {
+          "id": "it_quick",
+          "component": "Row",
+          "children": [
+            "it_q_relax",
+            "it_q_more",
+            "it_q_cheaper"
+          ]
+        },
+        {
+          "id": "it_q_relax",
+          "component": "Button",
+          "child": "it_q_relax_label",
+          "action": {
+            "event": {
+              "name": "refine_itinerary",
+              "context": {
+                "change": "Make the pace more relaxed: fewer activities per day and more free time."
+              }
+            }
+          }
+        },
+        {
+          "id": "it_q_relax_label",
+          "component": "Text",
+          "text": "🐢 Slower pace"
+        },
+        {
+          "id": "it_q_more",
+          "component": "Button",
+          "child": "it_q_more_label",
+          "action": {
+            "event": {
+              "name": "refine_itinerary",
+              "context": {
+                "change": "Pack in more: add extra activities and hidden gems."
+              }
+            }
+          }
+        },
+        {
+          "id": "it_q_more_label",
+          "component": "Text",
+          "text": "⚡ Pack in more"
+        },
+        {
+          "id": "it_q_cheaper",
+          "component": "Button",
+          "child": "it_q_cheaper_label",
+          "action": {
+            "event": {
+              "name": "refine_itinerary",
+              "context": {
+                "change": "Make the trip cheaper: swap paid activities for free or low-cost ones."
+              }
+            }
+          }
+        },
+        {
+          "id": "it_q_cheaper_label",
+          "component": "Text",
+          "text": "💸 Cheaper"
+        },
+        {
+          "id": "it_custom",
+          "component": "Row",
+          "children": [
+            "it_custom_input",
+            "it_custom_btn"
+          ],
+          "align": "end"
+        },
+        {
+          "id": "it_custom_input",
+          "component": "TextField",
+          "label": "Ask for a change",
+          "value": {
+            "@path": "/refine/request"
+          },
+          "weight": 1
+        },
+        {
+          "id": "it_custom_btn",
+          "component": "Button",
+          "child": "it_custom_btn_label",
+          "action": {
+            "event": {
+              "name": "refine_itinerary",
+              "context": {
+                "change": {
+                  "@path": "/refine/request"
+                }
+              }
+            }
+          },
+          "variant": "primary",
+          "checks": [
+            {
+              "condition": {
+                "@call": "required",
+                "args": {
+                  "value": {
+                    "@path": "/refine/request"
+                  }
+                },
+                "returnType": "boolean"
+              },
+              "message": "Type what to change."
+            }
+          ]
+        },
+        {
+          "id": "it_custom_btn_label",
+          "component": "Text",
+          "text": "Update plan"
+        }
+      ]
+    }
+  },
+  {
+    "version": "1.0",
+    "updateDataModel": {
+      "surfaceId": "itinerary",
+      "path": "/itinerary",
+      "value": {
+        "destination": "Thailand",
+        "title": "Thailand: Temples, Mountains & Islands",
+        "summary": "Bangkok's energy, Chiang Mai's calm, then island time.",
+        "nights": 7,
+        "lengthLabel": "🗓️ 7 nights · 3 days",
+        "routeLabel": "📍 Bangkok → Chiang Mai → Phuket",
+        "travelersLabel": "👥 2 travelers",
+        "budget": 1400,
+        "stops": [
+          {
+            "city": "Bangkok",
+            "nights": 2,
+            "label": "Bangkok · 2 nights"
+          },
+          {
+            "city": "Chiang Mai",
+            "nights": 2,
+            "label": "Chiang Mai · 2 nights"
+          },
+          {
+            "city": "Phuket",
+            "nights": 3,
+            "label": "Phuket · 3 nights"
+          }
+        ],
+        "days": [
+          {
+            "label": "Day 1",
+            "location": "📍 Bangkok",
+            "title": "Arrival & riverside",
+            "activities": [
+              {
+                "slot": "☀️ Afternoon",
+                "title": "🚆 Arrive and check in",
+                "description": "Settle in near the river.",
+                "cost": "Free"
+              },
+              {
+                "slot": "🌙 Evening",
+                "title": "🍜 Yaowarat street food",
+                "description": "Chinatown's best night market bites.",
+                "cost": "~$20"
+              }
+            ]
+          },
+          {
+            "label": "Day 2",
+            "location": "📍 Bangkok",
+            "title": "Temples & palaces",
+            "activities": [
+              {
+                "slot": "🌅 Morning",
+                "title": "🏛️ Grand Palace & Wat Pho",
+                "description": "Go early to beat the heat.",
+                "cost": "~$25"
+              },
+              {
+                "slot": "☀️ Afternoon",
+                "title": "📸 Wat Arun by ferry",
+                "description": "Cross the river for the porcelain spires.",
+                "cost": "~$5"
+              },
+              {
+                "slot": "🌙 Evening",
+                "title": "🍸 Rooftop bar",
+                "description": "Sunset drinks over the skyline.",
+                "cost": "~$30"
+              }
+            ]
+          },
+          {
+            "label": "Day 3",
+            "location": "📍 Chiang Mai",
+            "title": "Into the north",
+            "activities": [
+              {
+                "slot": "🌅 Morning",
+                "title": "🚆 Fly to Chiang Mai",
+                "description": "A short domestic hop.",
+                "cost": "~$45"
+              },
+              {
+                "slot": "🌙 Evening",
+                "title": "🍜 Night Bazaar",
+                "description": "Khao soi and crafts.",
+                "cost": "~$15"
+              }
+            ]
+          }
+        ],
+        "tips": [
+          {
+            "text": "• Dress modestly for temples."
+          },
+          {
+            "text": "• Grab/Bolt are the easiest way around cities."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "version": "1.0",
+    "updateDataModel": {
+      "surfaceId": "itinerary",
+      "path": "/refine/request",
+      "value": ""
+    }
+  }
+]

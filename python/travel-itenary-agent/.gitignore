@@ -1,0 +1,25 @@
+# Python
+agent/.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+agent/.env
+
+# Node
+client/node_modules/
+client/dist/
+*.tsbuildinfo
+
+.DS_Store
+
+# Demo recorder
+demo/node_modules/
+demo/output/
+
+# Not part of the published code
+demo/
+*.docx
+PLAN.md
+
+# The repo root ignores lib/ (Python packaging); the client source needs it
+!client/src/lib/

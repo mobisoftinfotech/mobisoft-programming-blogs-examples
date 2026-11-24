@@ -1,0 +1,129 @@
+:root {
+  --bg: #f6f7f5;
+  --panel: #ffffff;
+  --text: #1c2321;
+  --muted: #5f6b67;
+  --accent: #0b6e6e;
+  --border: #dde3e0;
+  --user: #e3f1ef;
+  --error: #b3261e;
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #121615;
+    --panel: #1b201f;
+    --text: #e6ebe9;
+    --muted: #9aa6a2;
+    --accent: #4fc1bd;
+    --border: #2c3432;
+    --user: #1f3533;
+    --error: #f2b8b5;
+  }
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); }
+
+.app { max-width: 1200px; margin: 0 auto; padding: 16px; }
+.app-header { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.app-header h1 { margin: 0; font-size: 1.5rem; color: var(--accent); }
+.tag { font-size: 0.8rem; color: var(--muted); }
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+@media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+
+.surfaces { display: flex; flex-direction: column; gap: 16px; }
+.surface, .chat {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+}
+.muted { color: var(--muted); }
+
+.chat { display: flex; flex-direction: column; min-height: 420px; max-height: 80vh; }
+.chat-log { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.bubble { padding: 8px 12px; border-radius: 10px; white-space: pre-wrap; line-height: 1.45; }
+.bubble.user { align-self: flex-end; background: var(--user); }
+.bubble.agent { align-self: flex-start; }
+.bubble.error { color: var(--error); border: 1px solid var(--error); }
+.status { color: var(--muted); font-style: italic; }
+
+.chat-input { display: flex; gap: 8px; margin-top: 12px; }
+.chat-input input {
+  flex: 1; padding: 10px; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--bg); color: var(--text);
+}
+.chat-input button {
+  padding: 10px 16px; border: 0; border-radius: 8px;
+  background: var(--accent); color: #fff; cursor: pointer;
+}
+.chat-input button:disabled { opacity: 0.5; cursor: default; }
+
+/* --- "the agent is working" feedback ------------------------------------------ */
+
+.surfaces { position: relative; }
+.surfaces.is-busy .surface {
+  opacity: 0.55;
+  pointer-events: none; /* no double clicks while a request is running */
+  transition: opacity 0.2s;
+}
+.progress-bar {
+  position: sticky; top: 0; z-index: 1;
+  height: 3px; border-radius: 3px; overflow: hidden;
+  background: color-mix(in oklab, var(--accent) 20%, transparent);
+}
+.progress-bar::after {
+  content: ''; position: absolute; inset: 0; width: 40%;
+  background: var(--accent); border-radius: 3px;
+  animation: slide 1.1s ease-in-out infinite;
+}
+@keyframes slide { from { transform: translateX(-100%); } to { transform: translateX(250%); } }
+
+.bubble.thinking {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--muted); font-style: italic;
+  border: 1px dashed var(--border);
+}
+.dots { display: inline-flex; gap: 4px; }
+.dots span {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+  animation: bounce 1.2s infinite ease-in-out;
+}
+.dots span:nth-child(2) { animation-delay: 0.15s; }
+.dots span:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bounce {
+  0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+  40% { transform: translateY(-5px); opacity: 1; }
+}
+.elapsed { font-size: 0.8rem; font-style: normal; opacity: 0.7; }
+
+.chat-input input:disabled { opacity: 0.6; }
+.spinner {
+  display: inline-block; width: 16px; height: 16px; vertical-align: middle;
+  border: 2px solid rgba(255, 255, 255, 0.4); border-top-color: #fff; border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .dots span, .progress-bar::after, .spinner { animation-duration: 3s; }
+}
+
+/* --- A2UI v1.0 surfaces ----------------------------------------------------------
+   v1.0 dropped the per-surface `theme`, so the brand colour is set here instead.
+   It must be on :root: the catalog derives its hover/light/dark shades there. */
+:root { --a2ui-color-primary: #0b6e6e; }
+
+/* Headings now arrive as Markdown inside Text ("## Where to next?"). */
+.surface :is(h1, h2, h3, h4, h5) { margin: 0.1em 0 0.15em; line-height: 1.25; }
+.surface :is(p) { margin: 0; }

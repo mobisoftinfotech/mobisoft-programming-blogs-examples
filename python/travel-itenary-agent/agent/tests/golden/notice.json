@@ -1,0 +1,207 @@
+[
+  {
+    "version": "1.0",
+    "createSurface": {
+      "surfaceId": "notice",
+      "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json"
+    }
+  },
+  {
+    "version": "1.0",
+    "updateComponents": {
+      "surfaceId": "notice",
+      "components": [
+        {
+          "id": "root",
+          "component": "Card",
+          "child": "n_col"
+        },
+        {
+          "id": "n_col",
+          "component": "Column",
+          "children": [
+            "n_head",
+            "n_msg",
+            "n_asked",
+            "n_divider",
+            "n_can_title",
+            "n_can_list",
+            "n_try_title",
+            "n_try_list",
+            "n_actions"
+          ]
+        },
+        {
+          "id": "n_head",
+          "component": "Row",
+          "children": [
+            "n_icon",
+            "n_title"
+          ],
+          "align": "center"
+        },
+        {
+          "id": "n_icon",
+          "component": "Icon",
+          "name": "info"
+        },
+        {
+          "id": "n_title",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "### ${/notice/title}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "n_msg",
+          "component": "Text",
+          "text": {
+            "@path": "/notice/message"
+          }
+        },
+        {
+          "id": "n_asked",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "You asked about: ${/notice/topic}"
+            },
+            "returnType": "string"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "n_divider",
+          "component": "Divider"
+        },
+        {
+          "id": "n_can_title",
+          "component": "Text",
+          "text": "##### Here's what I can do"
+        },
+        {
+          "id": "n_can_list",
+          "component": "Column",
+          "children": {
+            "componentId": "n_can_item",
+            "path": "/notice/capabilities"
+          }
+        },
+        {
+          "id": "n_can_item",
+          "component": "Text",
+          "text": {
+            "@path": "text"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "n_try_title",
+          "component": "Text",
+          "text": "##### Try one of these"
+        },
+        {
+          "id": "n_try_list",
+          "component": "Column",
+          "children": {
+            "componentId": "n_try_btn",
+            "path": "/notice/suggestions"
+          }
+        },
+        {
+          "id": "n_try_btn",
+          "component": "Button",
+          "child": "n_try_label",
+          "action": {
+            "event": {
+              "name": "suggest",
+              "context": {
+                "prompt": {
+                  "@path": "prompt"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "n_try_label",
+          "component": "Text",
+          "text": {
+            "@path": "label"
+          }
+        },
+        {
+          "id": "n_actions",
+          "component": "Row",
+          "children": [
+            "n_dismiss"
+          ],
+          "align": "center",
+          "justify": "end"
+        },
+        {
+          "id": "n_dismiss",
+          "component": "Button",
+          "child": "n_dismiss_label",
+          "action": {
+            "event": {
+              "name": "dismiss_notice"
+            }
+          },
+          "variant": "borderless"
+        },
+        {
+          "id": "n_dismiss_label",
+          "component": "Text",
+          "text": "Dismiss"
+        }
+      ]
+    }
+  },
+  {
+    "version": "1.0",
+    "updateDataModel": {
+      "surfaceId": "notice",
+      "path": "/notice",
+      "value": {
+        "kind": "off_topic",
+        "title": "That's outside my travel desk",
+        "message": "I'm Wanderly, a travel-planning assistant, so I can't help with fixing Python code. I'd love to help you plan a trip, though!",
+        "topic": "fixing Python code",
+        "capabilities": [
+          {
+            "text": "🗺️ Day-by-day itineraries for any country or city, with no dates needed"
+          },
+          {
+            "text": "🏨 Hotel options for any number of nights"
+          },
+          {
+            "text": "🛎️ Booking a stay and sending a confirmation"
+          },
+          {
+            "text": "✏️ Adjusting a plan: slower, cheaper, more food, more nature…"
+          }
+        ],
+        "suggestions": [
+          {
+            "label": "✨ Plan a 3-day tech trip to San Francisco",
+            "prompt": "Plan a 3-day tech trip to San Francisco"
+          },
+          {
+            "label": "🇹🇭 7 nights in Thailand",
+            "prompt": "Prepare me an itinerary for 7 nights and 8 days in Thailand"
+          },
+          {
+            "label": "🏨 Hotel in Lisbon, 2 nights",
+            "prompt": "Book a hotel for me in Lisbon for 2 days"
+          }
+        ]
+      }
+    }
+  }
+]

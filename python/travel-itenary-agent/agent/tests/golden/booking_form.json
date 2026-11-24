@@ -1,0 +1,279 @@
+[
+  {
+    "version": "1.0",
+    "createSurface": {
+      "surfaceId": "booking",
+      "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json"
+    }
+  },
+  {
+    "version": "1.0",
+    "updateComponents": {
+      "surfaceId": "booking",
+      "components": [
+        {
+          "id": "root",
+          "component": "Card",
+          "child": "b_col"
+        },
+        {
+          "id": "b_col",
+          "component": "Column",
+          "children": [
+            "b_title",
+            "b_hotel",
+            "b_hotel_meta",
+            "b_price",
+            "b_divider",
+            "b_name",
+            "b_email",
+            "b_guests",
+            "b_checkin",
+            "b_breakfast",
+            "b_actions"
+          ]
+        },
+        {
+          "id": "b_title",
+          "component": "Text",
+          "text": "### 🛎️ Complete your booking"
+        },
+        {
+          "id": "b_hotel",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "#### ${/booking/hotelName}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "b_hotel_meta",
+          "component": "Text",
+          "text": {
+            "@path": "/booking/hotelMeta"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "b_price",
+          "component": "Row",
+          "children": [
+            "b_price_label",
+            "b_price_value"
+          ],
+          "align": "center"
+        },
+        {
+          "id": "b_price_label",
+          "component": "Text",
+          "text": {
+            "@path": "/booking/priceLabel"
+          }
+        },
+        {
+          "id": "b_price_value",
+          "component": "Text",
+          "text": {
+            "@call": "formatCurrency",
+            "args": {
+              "value": {
+                "@path": "/booking/total"
+              },
+              "currency": "USD",
+              "decimals": 0
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "b_divider",
+          "component": "Divider"
+        },
+        {
+          "id": "b_name",
+          "component": "TextField",
+          "label": "Guest name",
+          "value": {
+            "@path": "/booking/guestName"
+          },
+          "checks": [
+            {
+              "condition": {
+                "@call": "required",
+                "args": {
+                  "value": {
+                    "@path": "/booking/guestName"
+                  }
+                },
+                "returnType": "boolean"
+              },
+              "message": "Please enter the guest name."
+            }
+          ]
+        },
+        {
+          "id": "b_email",
+          "component": "TextField",
+          "label": "Email for the confirmation",
+          "value": {
+            "@path": "/booking/email"
+          },
+          "checks": [
+            {
+              "condition": {
+                "@call": "email",
+                "args": {
+                  "value": {
+                    "@path": "/booking/email"
+                  }
+                },
+                "returnType": "boolean"
+              },
+              "message": "Enter a valid email."
+            }
+          ]
+        },
+        {
+          "id": "b_guests",
+          "component": "Slider",
+          "label": {
+            "@call": "formatString",
+            "args": {
+              "value": "Guests: ${/booking/guests}"
+            },
+            "returnType": "string"
+          },
+          "value": {
+            "@path": "/booking/guests"
+          },
+          "min": 1,
+          "max": 8
+        },
+        {
+          "id": "b_checkin",
+          "component": "DateTimeInput",
+          "label": "Check-in date (optional, leave empty for flexible)",
+          "value": {
+            "@path": "/booking/checkIn"
+          },
+          "enableDate": true
+        },
+        {
+          "id": "b_breakfast",
+          "component": "CheckBox",
+          "label": "Add breakfast (+$15 per guest per night)",
+          "value": {
+            "@path": "/booking/breakfast"
+          }
+        },
+        {
+          "id": "b_actions",
+          "component": "Row",
+          "children": [
+            "b_cancel",
+            "b_confirm"
+          ],
+          "align": "center",
+          "justify": "end"
+        },
+        {
+          "id": "b_cancel",
+          "component": "Button",
+          "child": "b_cancel_label",
+          "action": {
+            "event": {
+              "name": "cancel_booking"
+            }
+          },
+          "variant": "borderless"
+        },
+        {
+          "id": "b_cancel_label",
+          "component": "Text",
+          "text": "Cancel"
+        },
+        {
+          "id": "b_confirm",
+          "component": "Button",
+          "child": "b_confirm_label",
+          "action": {
+            "event": {
+              "name": "confirm_booking",
+              "context": {
+                "hotelId": "HT-LIS-3",
+                "guestName": {
+                  "@path": "/booking/guestName"
+                },
+                "email": {
+                  "@path": "/booking/email"
+                },
+                "guests": {
+                  "@path": "/booking/guests"
+                },
+                "checkIn": {
+                  "@path": "/booking/checkIn"
+                },
+                "breakfast": {
+                  "@path": "/booking/breakfast"
+                }
+              }
+            }
+          },
+          "variant": "primary",
+          "checks": [
+            {
+              "condition": {
+                "@call": "required",
+                "args": {
+                  "value": {
+                    "@path": "/booking/guestName"
+                  }
+                },
+                "returnType": "boolean"
+              },
+              "message": "Please enter the guest name."
+            },
+            {
+              "condition": {
+                "@call": "email",
+                "args": {
+                  "value": {
+                    "@path": "/booking/email"
+                  }
+                },
+                "returnType": "boolean"
+              },
+              "message": "Enter a valid email."
+            }
+          ]
+        },
+        {
+          "id": "b_confirm_label",
+          "component": "Text",
+          "text": "Confirm booking"
+        }
+      ]
+    }
+  },
+  {
+    "version": "1.0",
+    "updateDataModel": {
+      "surfaceId": "booking",
+      "path": "/booking",
+      "value": {
+        "hotelName": "Budget House Bairro Alto",
+        "hotelMeta": "★★ · Bairro Alto, Lisbon · rated 7.9",
+        "priceLabel": "2 nights × $93 =",
+        "total": 186,
+        "guestName": "",
+        "email": "",
+        "guests": 2,
+        "checkIn": "",
+        "breakfast": false
+      }
+    }
+  }
+]

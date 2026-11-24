@@ -1,0 +1,103 @@
+[
+  {
+    "version": "1.0",
+    "createSurface": {
+      "surfaceId": "welcome",
+      "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json"
+    }
+  },
+  {
+    "version": "1.0",
+    "updateComponents": {
+      "surfaceId": "welcome",
+      "components": [
+        {
+          "id": "root",
+          "component": "Column",
+          "children": [
+            "w_title",
+            "w_sub",
+            "w_list",
+            "w_hint"
+          ]
+        },
+        {
+          "id": "w_title",
+          "component": "Text",
+          "text": "## Where to next? 🌍"
+        },
+        {
+          "id": "w_sub",
+          "component": "Text",
+          "text": "No dates or departure city needed. Tap an idea or just type in the chat.",
+          "variant": "caption"
+        },
+        {
+          "id": "w_list",
+          "component": "Column",
+          "children": {
+            "componentId": "w_item",
+            "path": "/welcome/suggestions"
+          }
+        },
+        {
+          "id": "w_item",
+          "component": "Button",
+          "child": "w_item_label",
+          "action": {
+            "event": {
+              "name": "suggest",
+              "context": {
+                "prompt": {
+                  "@path": "prompt"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "w_item_label",
+          "component": "Text",
+          "text": {
+            "@path": "label"
+          }
+        },
+        {
+          "id": "w_hint",
+          "component": "Text",
+          "text": "Everything on this side is A2UI: JSON sent by the agent, drawn by the client's own components.",
+          "variant": "caption"
+        }
+      ]
+    }
+  },
+  {
+    "version": "1.0",
+    "updateDataModel": {
+      "surfaceId": "welcome",
+      "path": "/",
+      "value": {
+        "welcome": {
+          "suggestions": [
+            {
+              "label": "🇹🇭  7 nights & 8 days in Thailand",
+              "prompt": "Prepare me an itinerary for 7 nights and 8 days in Thailand"
+            },
+            {
+              "label": "🏨  Book a hotel in Lisbon for 2 nights",
+              "prompt": "Book a hotel for me in Lisbon for 2 days"
+            },
+            {
+              "label": "🗼  Romantic weekend in Paris",
+              "prompt": "Plan a romantic 2-night weekend in Paris for two"
+            },
+            {
+              "label": "🍣  5-day food trip to Tokyo",
+              "prompt": "Plan a 5 day food-focused trip to Tokyo"
+            }
+          ]
+        }
+      }
+    }
+  }
+]

@@ -1,0 +1,98 @@
+{
+  "paris": {
+    "name": "Paris",
+    "country": "France",
+    "airport": "CDG",
+    "currency": "EUR",
+    "hotel_base_per_night": 190,
+    "monthly_high_c": [8, 9, 13, 16, 20, 23, 26, 25, 21, 16, 11, 8],
+    "monthly_rain_days": [10, 9, 10, 9, 10, 8, 7, 7, 8, 10, 10, 11],
+    "neighborhoods": ["Le Marais", "Saint-Germain-des-Prés", "Montmartre", "Latin Quarter"],
+    "attractions": [
+      {"name": "Louvre Museum", "category": "culture", "hours": 3, "cost": 22, "indoor": true},
+      {"name": "Musée d'Orsay", "category": "culture", "hours": 2.5, "cost": 16, "indoor": true},
+      {"name": "Eiffel Tower summit", "category": "landmarks", "hours": 2, "cost": 36, "indoor": false},
+      {"name": "Seine evening cruise", "category": "landmarks", "hours": 1.5, "cost": 18, "indoor": false},
+      {"name": "Montmartre walking tour", "category": "culture", "hours": 2.5, "cost": 0, "indoor": false},
+      {"name": "Le Marais food crawl", "category": "food", "hours": 3, "cost": 95, "indoor": false},
+      {"name": "Rue Cler market breakfast", "category": "food", "hours": 1.5, "cost": 25, "indoor": false},
+      {"name": "Cooking class: French pastries", "category": "food", "hours": 3, "cost": 120, "indoor": true},
+      {"name": "Jardin du Luxembourg picnic", "category": "outdoors", "hours": 2, "cost": 15, "indoor": false},
+      {"name": "Versailles day trip", "category": "culture", "hours": 6, "cost": 32, "indoor": false},
+      {"name": "Canal Saint-Martin bike ride", "category": "outdoors", "hours": 2, "cost": 20, "indoor": false},
+      {"name": "Jazz club in Saint-Germain", "category": "nightlife", "hours": 2.5, "cost": 35, "indoor": true}
+    ]
+  },
+  "tokyo": {
+    "name": "Tokyo",
+    "country": "Japan",
+    "airport": "HND",
+    "currency": "JPY",
+    "hotel_base_per_night": 170,
+    "monthly_high_c": [10, 11, 14, 19, 23, 26, 30, 31, 27, 22, 17, 12],
+    "monthly_rain_days": [5, 6, 10, 10, 11, 13, 12, 9, 12, 10, 7, 5],
+    "neighborhoods": ["Shinjuku", "Shibuya", "Asakusa", "Ginza"],
+    "attractions": [
+      {"name": "Senso-ji Temple at dawn", "category": "culture", "hours": 1.5, "cost": 0, "indoor": false},
+      {"name": "teamLab Planets", "category": "culture", "hours": 2, "cost": 28, "indoor": true},
+      {"name": "Tsukiji Outer Market tasting", "category": "food", "hours": 2, "cost": 40, "indoor": false},
+      {"name": "Ramen alley in Shinjuku", "category": "food", "hours": 1, "cost": 12, "indoor": true},
+      {"name": "Sushi-making class", "category": "food", "hours": 2.5, "cost": 85, "indoor": true},
+      {"name": "Meiji Shrine & Yoyogi Park", "category": "outdoors", "hours": 2, "cost": 0, "indoor": false},
+      {"name": "Shibuya Sky observation deck", "category": "landmarks", "hours": 1.5, "cost": 15, "indoor": false},
+      {"name": "Mt. Takao hike", "category": "outdoors", "hours": 5, "cost": 10, "indoor": false},
+      {"name": "Akihabara arcades", "category": "nightlife", "hours": 2, "cost": 20, "indoor": true},
+      {"name": "Golden Gai bar hop", "category": "nightlife", "hours": 2.5, "cost": 45, "indoor": true},
+      {"name": "Tokyo National Museum", "category": "culture", "hours": 2.5, "cost": 7, "indoor": true},
+      {"name": "Sumida River cruise", "category": "landmarks", "hours": 1, "cost": 12, "indoor": false}
+    ]
+  },
+  "lisbon": {
+    "name": "Lisbon",
+    "country": "Portugal",
+    "airport": "LIS",
+    "currency": "EUR",
+    "hotel_base_per_night": 130,
+    "monthly_high_c": [15, 16, 19, 20, 23, 26, 28, 29, 27, 23, 18, 15],
+    "monthly_rain_days": [10, 9, 8, 9, 6, 2, 1, 1, 4, 8, 10, 11],
+    "neighborhoods": ["Alfama", "Baixa", "Bairro Alto", "Belém"],
+    "attractions": [
+      {"name": "Tram 28 ride through Alfama", "category": "landmarks", "hours": 1, "cost": 3, "indoor": false},
+      {"name": "Jerónimos Monastery", "category": "culture", "hours": 1.5, "cost": 12, "indoor": true},
+      {"name": "Pastéis de Belém tasting", "category": "food", "hours": 1, "cost": 8, "indoor": true},
+      {"name": "Time Out Market lunch", "category": "food", "hours": 1.5, "cost": 25, "indoor": true},
+      {"name": "Fado dinner in Alfama", "category": "nightlife", "hours": 3, "cost": 60, "indoor": true},
+      {"name": "Sintra palaces day trip", "category": "culture", "hours": 7, "cost": 45, "indoor": false},
+      {"name": "Miradouro sunset crawl", "category": "outdoors", "hours": 2, "cost": 0, "indoor": false},
+      {"name": "Cascais beach afternoon", "category": "outdoors", "hours": 4, "cost": 5, "indoor": false},
+      {"name": "Gulbenkian Museum", "category": "culture", "hours": 2, "cost": 10, "indoor": true},
+      {"name": "Port & petiscos tasting", "category": "food", "hours": 2, "cost": 55, "indoor": true},
+      {"name": "LX Factory browse", "category": "culture", "hours": 1.5, "cost": 0, "indoor": false},
+      {"name": "Bairro Alto night out", "category": "nightlife", "hours": 3, "cost": 30, "indoor": false}
+    ]
+  },
+  "new york": {
+    "name": "New York",
+    "country": "USA",
+    "airport": "JFK",
+    "currency": "USD",
+    "hotel_base_per_night": 260,
+    "monthly_high_c": [4, 5, 10, 16, 22, 27, 29, 29, 25, 18, 12, 6],
+    "monthly_rain_days": [11, 10, 11, 11, 11, 10, 10, 10, 9, 9, 10, 11],
+    "neighborhoods": ["Midtown", "Lower East Side", "Williamsburg", "Upper West Side"],
+    "attractions": [
+      {"name": "The Met", "category": "culture", "hours": 3, "cost": 30, "indoor": true},
+      {"name": "Central Park bike loop", "category": "outdoors", "hours": 2, "cost": 25, "indoor": false},
+      {"name": "High Line & Chelsea Market", "category": "food", "hours": 2.5, "cost": 30, "indoor": false},
+      {"name": "Brooklyn Bridge walk", "category": "landmarks", "hours": 1.5, "cost": 0, "indoor": false},
+      {"name": "Top of the Rock", "category": "landmarks", "hours": 1.5, "cost": 40, "indoor": false},
+      {"name": "Broadway show", "category": "nightlife", "hours": 3, "cost": 150, "indoor": true},
+      {"name": "Lower East Side food tour", "category": "food", "hours": 3, "cost": 89, "indoor": false},
+      {"name": "MoMA", "category": "culture", "hours": 2.5, "cost": 30, "indoor": true},
+      {"name": "Statue of Liberty ferry", "category": "landmarks", "hours": 4, "cost": 25, "indoor": false},
+      {"name": "Comedy Cellar", "category": "nightlife", "hours": 2, "cost": 30, "indoor": true},
+      {"name": "Williamsburg brunch & flea", "category": "food", "hours": 2.5, "cost": 45, "indoor": false},
+      {"name": "Governors Island afternoon", "category": "outdoors", "hours": 3, "cost": 5, "indoor": false}
+    ]
+  }
+}

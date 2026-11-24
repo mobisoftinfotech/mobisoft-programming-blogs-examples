@@ -1,0 +1,187 @@
+[
+  {
+    "version": "1.0",
+    "createSurface": {
+      "surfaceId": "booking",
+      "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json"
+    }
+  },
+  {
+    "version": "1.0",
+    "updateComponents": {
+      "surfaceId": "booking",
+      "components": [
+        {
+          "id": "root",
+          "component": "Card",
+          "child": "c_col"
+        },
+        {
+          "id": "c_col",
+          "component": "Column",
+          "children": [
+            "c_head",
+            "c_ref",
+            "c_divider",
+            "c_hotel",
+            "c_meta",
+            "c_stay",
+            "c_guest",
+            "c_extras",
+            "c_total_row",
+            "c_actions"
+          ]
+        },
+        {
+          "id": "c_head",
+          "component": "Row",
+          "children": [
+            "c_icon",
+            "c_title"
+          ],
+          "align": "center"
+        },
+        {
+          "id": "c_icon",
+          "component": "Icon",
+          "name": "check"
+        },
+        {
+          "id": "c_title",
+          "component": "Text",
+          "text": "### Booking confirmed"
+        },
+        {
+          "id": "c_ref",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "##### Reference: ${/confirmation/reference}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "c_divider",
+          "component": "Divider"
+        },
+        {
+          "id": "c_hotel",
+          "component": "Text",
+          "text": {
+            "@call": "formatString",
+            "args": {
+              "value": "#### ${/confirmation/hotel}"
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "c_meta",
+          "component": "Text",
+          "text": {
+            "@path": "/confirmation/meta"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "c_stay",
+          "component": "Text",
+          "text": {
+            "@path": "/confirmation/stay"
+          }
+        },
+        {
+          "id": "c_guest",
+          "component": "Text",
+          "text": {
+            "@path": "/confirmation/guest"
+          }
+        },
+        {
+          "id": "c_extras",
+          "component": "Text",
+          "text": {
+            "@path": "/confirmation/extras"
+          },
+          "variant": "caption"
+        },
+        {
+          "id": "c_total_row",
+          "component": "Row",
+          "children": [
+            "c_total_label",
+            "c_total"
+          ],
+          "align": "center"
+        },
+        {
+          "id": "c_total_label",
+          "component": "Text",
+          "text": "Total paid at the hotel:"
+        },
+        {
+          "id": "c_total",
+          "component": "Text",
+          "text": {
+            "@call": "formatCurrency",
+            "args": {
+              "value": {
+                "@path": "/confirmation/total"
+              },
+              "currency": "USD",
+              "decimals": 0
+            },
+            "returnType": "string"
+          }
+        },
+        {
+          "id": "c_actions",
+          "component": "Row",
+          "children": [
+            "c_new"
+          ],
+          "justify": "end"
+        },
+        {
+          "id": "c_new",
+          "component": "Button",
+          "child": "c_new_label",
+          "action": {
+            "event": {
+              "name": "start_over"
+            }
+          }
+        },
+        {
+          "id": "c_new_label",
+          "component": "Text",
+          "text": "✨ Plan something else"
+        }
+      ]
+    }
+  },
+  {
+    "version": "1.0",
+    "updateDataModel": {
+      "surfaceId": "booking",
+      "path": "/confirmation",
+      "value": {
+        "reference": "WND-T5VUQN",
+        "hotel": "Budget House Bairro Alto",
+        "meta": "Bairro Alto, Lisbon · 2 nights",
+        "stay": "Flexible dates: we'll email you to pick them",
+        "guest": "👤 Ana Silva · 2 guests · confirmation sent to ana@example.com",
+        "extras": "🥐 Breakfast included",
+        "total": 246
+      }
+    }
+  },
+  {
+    "version": "1.0",
+    "deleteSurface": {
+      "surfaceId": "hotels"
+    }
+  }
+]

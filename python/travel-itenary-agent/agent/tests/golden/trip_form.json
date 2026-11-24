@@ -1,0 +1,245 @@
+[
+  {
+    "version": "1.0",
+    "createSurface": {
+      "surfaceId": "trip_form",
+      "catalogId": "https://a2ui.org/specification/v1_0/catalogs/basic/catalog.json"
+    }
+  },
+  {
+    "version": "1.0",
+    "updateComponents": {
+      "surfaceId": "trip_form",
+      "components": [
+        {
+          "id": "root",
+          "component": "Column",
+          "children": [
+            "header",
+            "route_row",
+            "dates_row",
+            "travelers",
+            "budget",
+            "interests",
+            "submit"
+          ]
+        },
+        {
+          "id": "header",
+          "component": "Column",
+          "children": [
+            "title",
+            "subtitle"
+          ]
+        },
+        {
+          "id": "title",
+          "component": "Text",
+          "text": "## ✈️ Plan your trip"
+        },
+        {
+          "id": "subtitle",
+          "component": "Text",
+          "text": "Only the destination is required. Dates and departure city are optional.",
+          "variant": "caption"
+        },
+        {
+          "id": "route_row",
+          "component": "Row",
+          "children": [
+            "origin",
+            "destination"
+          ]
+        },
+        {
+          "id": "origin",
+          "component": "TextField",
+          "label": "From (optional)",
+          "value": {
+            "@path": "/trip/origin"
+          },
+          "weight": 1
+        },
+        {
+          "id": "destination",
+          "component": "TextField",
+          "label": "To",
+          "value": {
+            "@path": "/trip/destination"
+          },
+          "weight": 1
+        },
+        {
+          "id": "dates_row",
+          "component": "Row",
+          "children": [
+            "start_date",
+            "end_date"
+          ]
+        },
+        {
+          "id": "start_date",
+          "component": "DateTimeInput",
+          "label": "Depart (optional)",
+          "value": {
+            "@path": "/trip/startDate"
+          },
+          "enableDate": true,
+          "min": "2027-01-01",
+          "weight": 1
+        },
+        {
+          "id": "end_date",
+          "component": "DateTimeInput",
+          "label": "Return (optional)",
+          "value": {
+            "@path": "/trip/endDate"
+          },
+          "enableDate": true,
+          "min": {
+            "@path": "/trip/startDate"
+          },
+          "weight": 1
+        },
+        {
+          "id": "travelers",
+          "component": "Slider",
+          "label": {
+            "@call": "formatString",
+            "args": {
+              "value": "Travelers: ${/trip/travelers}"
+            },
+            "returnType": "string"
+          },
+          "value": {
+            "@path": "/trip/travelers"
+          },
+          "min": 1,
+          "max": 8
+        },
+        {
+          "id": "budget",
+          "component": "Slider",
+          "label": {
+            "@call": "formatString",
+            "args": {
+              "value": "Total budget (USD): ${/trip/budget}"
+            },
+            "returnType": "string"
+          },
+          "value": {
+            "@path": "/trip/budget"
+          },
+          "min": 500,
+          "max": 15000
+        },
+        {
+          "id": "interests",
+          "component": "ChoicePicker",
+          "label": "Interests",
+          "options": [
+            {
+              "label": "🏛️ Culture",
+              "value": "culture"
+            },
+            {
+              "label": "🍜 Food",
+              "value": "food"
+            },
+            {
+              "label": "🥾 Outdoors",
+              "value": "outdoors"
+            },
+            {
+              "label": "📸 Landmarks",
+              "value": "landmarks"
+            },
+            {
+              "label": "🌙 Nightlife",
+              "value": "nightlife"
+            }
+          ],
+          "value": {
+            "@path": "/trip/interests"
+          },
+          "variant": "multipleSelection",
+          "displayStyle": "chips"
+        },
+        {
+          "id": "submit",
+          "component": "Button",
+          "child": "submit_label",
+          "action": {
+            "event": {
+              "name": "plan_trip",
+              "context": {
+                "origin": {
+                  "@path": "/trip/origin"
+                },
+                "destination": {
+                  "@path": "/trip/destination"
+                },
+                "startDate": {
+                  "@path": "/trip/startDate"
+                },
+                "endDate": {
+                  "@path": "/trip/endDate"
+                },
+                "travelers": {
+                  "@path": "/trip/travelers"
+                },
+                "budget": {
+                  "@path": "/trip/budget"
+                },
+                "interests": {
+                  "@path": "/trip/interests"
+                }
+              }
+            }
+          },
+          "variant": "primary",
+          "checks": [
+            {
+              "condition": {
+                "@call": "required",
+                "args": {
+                  "value": {
+                    "@path": "/trip/destination"
+                  }
+                },
+                "returnType": "boolean"
+              },
+              "message": "Where do you want to go?"
+            }
+          ]
+        },
+        {
+          "id": "submit_label",
+          "component": "Text",
+          "text": "Plan my trip"
+        }
+      ]
+    }
+  },
+  {
+    "version": "1.0",
+    "updateDataModel": {
+      "surfaceId": "trip_form",
+      "path": "/",
+      "value": {
+        "trip": {
+          "origin": "",
+          "destination": "",
+          "startDate": "",
+          "endDate": "",
+          "travelers": 2,
+          "budget": 3000,
+          "interests": [
+            "culture",
+            "food"
+          ]
+        }
+      }
+    }
+  }
+]
