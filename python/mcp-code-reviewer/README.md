@@ -1,353 +1,190 @@
 # MCP Code Reviewer
 
-Automated code review MCP server with technology-specific checklists and real-time progress tracking.
+An MCP server that reviews code with YAML checklists. Claude Desktop (or any MCP client) can call its five tools to detect a project's technology, load a checklist, and run a review.
 
-## Features
+This is the example code for the two-part Mobisoft Infotech blog series:
 
--  **Auto-detect technology stack** from project files
--  **Technology-specific checklists** for Python, JavaScript/TypeScript, and Java
--  **Real-time progress tracking** with pass/fail/skip counts
--  **Comprehensive checks** covering:
-  - Security vulnerabilities
-  - Code quality issues
-  - Performance problems
-  - Best practices
-  - Testing coverage
--  **Detailed reporting** with file locations and line numbers
--  **Severity levels** (critical, warning, info)
+- Part 1: [AI Agent Development Example with Custom MCP Server: Build a Code Review Agent](https://mobisoftinfotech.com/resources/blog/ai-development/ai-agent-development-custom-mcp-server-code-review)
+- Part 2: [AI Agent Development with MCP Server: Integration, Testing & Deployment](https://mobisoftinfotech.com/resources/blog/ai-development/ai-agent-development-mcp-server-integration-deployment)
 
-## Installation
+`main.py` matches Part 2. It is a standalone, simplified server built on version 2 of the MCP Python SDK, and it does not import the Part 1 modules.
 
-### Prerequisites
+## Requirements
 
-- Python 3.11 or higher
-- `uv` package manager (recommended) or `pip`
+- Python 3.10 or higher (tested on Python 3.13)
+- [uv](https://docs.astral.sh/uv/)
+- Node.js, only if you want to use the MCP Inspector
 
-### Setup
+The pinned versions are `mcp[cli]==2.3.0` and `pyyaml==6.0.3`. In SDK version 2, the server class is `MCPServer` (`from mcp.server.mcpserver import Context, MCPServer`). The old `mcp.server.fastmcp` import no longer works. If you need SDK version 1, pin `mcp<2` and use the FastMCP import instead. Do not mix the two.
 
-1. **Navigate to the project directory:**
-   ```bash
-   cd mcp-code-reviewer
-   ```
+## Setup
 
-2. **Install dependencies:**
-   ```bash
-   # Using uv (recommended)
-   uv sync 
-   
-   #or 
-   uv pip install -e .
-
-   # Or using pip
-   pip install -e .
-   ```
-
-3. **Configure in Claude Desktop:**
-
-   Edit your Claude Desktop config file:
-   - **Mac**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-   - **Windows**: `%APPDATA%/Claude/claude_desktop_config.json`
-
-   Add the MCP server for windows:
-   ```json
-   {
-     "mcpServers": {
-      "mcp-code-reviewer": {
-        "command": "uv",
-        "args": [
-          "--directory",
-          "C:\\Users\\YourUsername\\code\\mcp-code-reviewer",
-          "run",
-          "mcp-code-reviewer"
-        ],
-        "env": {
-          "DANGEROUSLY_OMIT_AUTH": "true"
-        }
-      }
-    }
-   }
-   ```
-   Add the MCP server for windows:
-   ```json
-   {
-     "mcpServers": {
-      "mcp-code-reviewer": {
-        "command": "uv",
-        "args": [
-          "--directory",
-          "/Users/yourname/code/mcp-code-reviewer",
-          "run",
-          "mcp-code-reviewer"
-        ],
-        "env": {
-          "DANGEROUSLY_OMIT_AUTH": "true"
-        }
-      }
-     }
-    }
-   ```
-
-4. **Restart Claude Desktop, End from task manager**
-
-## Usage
-
-### In Claude Desktop
-
-Once configured, the tools are automatically available. Just chat with Claude:
-
-**Example 1: Quick Review**
-```
-You: "Review my Python project at /Users/me/my-app"
-
-Claude will:
-1. Detect technology (Python)
-2. Load Python checklist
-3. Execute all checks with real-time progress
-4. Show results with pass/fail counts
+```bash
+cd mcp-code-reviewer
+uv sync
 ```
 
-**Example 2: Check Specific Technology**
-```
-You: "What checks are on the JavaScript checklist?"
+`uv sync` creates `.venv` and installs the `mcp-code-reviewer` command defined in `pyproject.toml`.
 
-Claude will show all JavaScript/React checks organized by category
-```
+## Tools
 
-**Example 3: Get Available Checklists**
-```
-You: "What technologies can you review?"
+| Tool | Input | What it does |
+| --- | --- | --- |
+| `detect_tech` | `project_path`: a config file such as `package.json`, `pyproject.toml`, `requirements.txt` or `pom.xml` | Maps the file name to a technology |
+| `get_available_checklists` | none | Lists the YAML files in `checklists/` |
+| `get_checklist` | `name`, such as `javascript` | Returns one checklist |
+| `review_code` | `project_path`: a project folder | Runs the regex checks on `.js`, `.py` and `.java` files, with progress updates and a time limit |
+| `get_review_status` | `review_id` | Returns the status of a review from this server session |
 
-Claude will list: python, javascript, java, etc.
-```
+Every error comes back as short JSON, for example `{"error": "Unknown checklist: ruby"}`.
 
-### Available MCP Tools
+Sample `review_code` result for a project with one `eval()` call:
 
-#### 1. `detect_tech(project_path)`
-Detects technology stack from project files.
-
-**Example:**
-```python
-detect_tech("/path/to/project")
-```
-
-**Returns:**
 ```json
 {
-  "primary": "python",
-  "frameworks": ["django", "flask"],
-  "confidence": 0.9
-}
-```
-
-#### 2. `get_available_checklists()`
-Lists all available technology checklists.
-
-**Example:**
-```python
-get_available_checklists()
-```
-
-**Returns:**
-```json
-{
-  "available_checklists": ["python", "javascript", "java"],
-  "count": 3
-}
-```
-
-#### 3. `get_checklist(technology)`
-Shows all checks for a specific technology.
-
-**Example:**
-```python
-get_checklist("python")
-```
-
-**Returns:** Complete checklist with all categories and checks
-
-#### 4. `review_code(project_path, technology=None)`
-Executes comprehensive code review with real-time progress.
-
-**Example:**
-```python
-review_code("/path/to/project", technology="python")
-# or auto-detect:
-review_code("/path/to/project")
-```
-
-**Returns:**
-```json
-{
-  "technology": "python",
-  "summary": {
-    "total_checks": 25,
-    "passed": 18,
-    "failed": 5,
-    "skipped": 2,
-    "percentage": 80.0
-  },
-  "failures": [
+  "review_id": "ab733df9",
+  "status": "completed",
+  "files": 1,
+  "skipped": 0,
+  "truncated": false,
+  "findings": [
     {
-      "check_id": "SEC-001",
-      "message": "Hardcoded API key found",
-      "file_path": "config.py",
-      "line_number": 12,
-      "severity": "critical"
+      "file": "app.js",
+      "check": "SEC-002"
     }
-  ],
-  "status_text": "✅ 18 passed | ❌ 5 failed | ⏭️ 2 skipped"
+  ]
 }
 ```
 
-#### 5. `get_review_status(project_path, technology=None)`
-Gets status of a previously run review.
+## Safety limits
 
-## Supported Technologies
+- **Approved folders only.** The tools read only inside the folders listed in `REVIEW_ALLOWED_DIRS`. Without it, they read only the folder the server starts in. Symlinks are resolved before the check. Separate several folders with `;` on Windows and `:` on macOS and Linux.
+- **Skipped files.** The review skips symlinks, secret files (`.env`, `id_rsa`, `id_ed25519`, `*.pem`, `*.key`, `*.p12`), files over 200 KB, unreadable files, and the `node_modules`, `.git`, `.venv`, `venv`, `__pycache__` and `dist` folders.
+- **Bounded scans.** A review stops after 500 files or 20 seconds and reports `truncated` or `stopped (time limit)`.
+- **Demo-only state.** Review status lives in memory. It disappears when the server restarts, and separate processes do not share it.
 
-### Python
-- **Frameworks**: Django, Flask, FastAPI
-- **Categories**: Security, Code Quality, Performance, Best Practices, Testing
-- **Total Checks**: 20+
+## Configure Claude Desktop
 
-**Key Checks:**
-- Hardcoded credentials detection
-- SQL injection prevention
-- Dangerous function usage (eval, exec)
-- PEP 8 compliance
-- Type hints and docstrings
+Claude Desktop is available for macOS, Windows, and Linux (beta). Open the config file from Settings → Developer → Edit Config, or edit it directly:
 
-### JavaScript/TypeScript
-- **Frameworks**: React, Vue, Node.js, Angular
-- **Categories**: Security, Code Quality, Performance, Best Practices, React-specific
-- **Total Checks**: 25+
+- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+- Linux: `~/.config/Claude/claude_desktop_config.json`
 
-**Key Checks:**
-- XSS vulnerabilities
-- console.log in production
-- React optimization (memo, keys)
-- Modern syntax (const/let vs var)
-- ESLint configuration
+macOS and Linux:
 
-### Java
-- **Frameworks**: Spring Boot, Maven, Gradle
-- **Categories**: Security, Code Quality, Performance, Best Practices, Spring-specific
-- **Total Checks**: 20+
+```json
+{
+  "mcpServers": {
+    "mcp-code-reviewer": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "/Users/yourname/code/mcp-code-reviewer",
+        "run",
+        "mcp-code-reviewer"
+      ],
+      "env": {
+        "REVIEW_ALLOWED_DIRS": "/Users/yourname/code/projects"
+      }
+    }
+  }
+}
+```
 
-**Key Checks:**
-- SQL injection (PreparedStatement)
-- Exception handling
-- Resource management (try-with-resources)
-- SOLID principles
-- Spring dependency injection
+Windows:
 
-## Customization
+```json
+{
+  "mcpServers": {
+    "mcp-code-reviewer": {
+      "command": "uv",
+      "args": [
+        "--directory",
+        "C:\\Users\\YourUsername\\code\\mcp-code-reviewer",
+        "run",
+        "mcp-code-reviewer"
+      ],
+      "env": {
+        "REVIEW_ALLOWED_DIRS": "C:\\Users\\YourUsername\\code\\projects"
+      }
+    }
+  }
+}
+```
 
-### Adding Custom Checklists
+Use absolute paths. If Claude Desktop cannot find `uv`, put the full path to `uv` in `command`. Quit Claude Desktop completely and start it again, then check that the server shows as running under Settings → Developer.
 
-Create a new YAML file in `checklists/` directory:
+Example prompts:
+
+- "Can you detect what technology is used in my project? The config file is at /path/to/project/package.json"
+- "What code review checklists do you have available?"
+- "Show me what checks are included in the JavaScript checklist."
+- "Please review my project at /path/to/project"
+
+## Test with the MCP Inspector
+
+```bash
+uv run mcp dev main.py
+```
+
+The command starts the Inspector with `npx` and prints a local address that includes an access token. Open it, switch on the server connection, open the Tools tab, pick a tool, enter its arguments, and choose Execute Tool. The Messages panel shows each request and response.
+
+Keep the Inspector bound to localhost and keep its token private. Never turn off its authentication.
+
+## Checklists
+
+Checklists live in `checklists/` and use this structure:
 
 ```yaml
-technology: rust
-description: Code review checklist for Rust projects
+technology: python
+description: Code review checklist for Python projects
 
 categories:
   - name: Security
     items:
-      - id: SEC-001
-        description: No unsafe blocks without justification
-        validator: check_unsafe_usage
-        severity: warning
+      - id: SEC-003
+        description: No eval() or exec() usage
+        validator: check_dangerous_functions
+        severity: critical
         patterns:
-          - 'unsafe\s*\{'
+          - "\\beval\\("
+          - "\\bexec\\("
 ```
 
-### Checklist Structure
+`review_code` reads every `patterns` entry as a Python regular expression and reports the item's `id` when a file matches. Items with `validator: check_test_files` hold file-name globs such as `*.test.js`, so `review_code` skips them.
 
-```yaml
-technology: <name>
-description: <description>
+Quote every pattern. In single quotes, backslashes stay literal (`'\beval\('`). In double quotes, double them (`"\\beval\\("`). An unquoted pattern that starts with `[` is read as a YAML list.
 
-categories:
-  - name: <category_name>
-    items:
-      - id: <CHECK-ID>
-        description: <what to check>
-        validator: <validator_function>
-        severity: critical|warning|info
-        patterns:  # regex patterns (optional)
-          - '<pattern1>'
-          - '<pattern2>'
-        files:  # specific files to check (optional)
-          - 'filename.ext'
-```
-
-## Architecture
-
-```
-mcp-code-reviewer/
-├── main.py                  # MCP server entry point
-├── technology_detector.py   # Auto-detect tech stack
-├── checklist_engine.py      # Execute reviews
-├── checklists/              # YAML checklist files
-│   ├── python.yaml
-│   ├── javascript.yaml
-│   └── java.yaml
-├── validators/              # Validation logic
-│   ├── base_validator.py
-│   ├── pattern_validator.py
-│   └── file_validator.py
-└── reporters/               # Progress tracking
-    └── progress_tracker.py
-```
-
-## Progress Tracking
-
-The server provides real-time updates as checks execute:
-
-```
-Progress: [████████████░░░░░░░░] 60% (15/25)
-✅ 12 passed | ❌ 3 failed | ⏭️ 0 skipped
-
-Current: SEC-003 - Checking for dangerous function usage...
-```
-
-## Severity Levels
-
-- 🔴 **Critical**: Security vulnerabilities, must fix immediately
-- 🟡 **Warning**: Important issues, should fix soon
-- 🔵 **Info**: Suggestions for improvement
-- ⚠️ **Error**: Tool execution errors
+To add a language, add a checklist such as `checklists/ruby.yaml`, then add its config file to `CONFIG_FILES` and its source suffix to `SOURCE_SUFFIXES` in `main.py`.
 
 ## Troubleshooting
 
-### "Could not detect technology"
-- Ensure project has indicator files (package.json, requirements.txt, etc.)
-- Manually specify technology: `review_code(path, technology="python")`
+- **Request timed out (-32001) on `detect_tech`:** pass a config file, not a folder.
+- **`ModuleNotFoundError`:** delete `.venv`, run `uv sync`, and restart Claude Desktop.
+- **`failed to remove file .venv/lib64: Access is denied`:** the `.venv` was created in WSL. Delete it and let the Windows side recreate it.
+- **Server will not start:** check the Claude Desktop logs (macOS `~/Library/Logs/Claude/`, Windows `%APPDATA%\Claude\logs\`, Linux `~/.config/Claude/logs/`), then run `uv run mcp-code-reviewer` in the project folder and read the output.
 
-### "Checklist not found"
-- Check available checklists: `get_available_checklists()`
-- Verify checklist file exists in `checklists/` directory
+## Project layout
 
-### "Project path does not exist"
-- Use absolute paths, not relative
-- Verify path on your system
+```
+mcp-code-reviewer/
+├── main.py                  # Part 2: the MCP server (SDK v2)
+├── pyproject.toml
+├── checklists/              # YAML checklists used by main.py
+│   ├── python.yaml
+│   ├── javascript.yaml
+│   └── java.yaml
+├── technology_detector.py   # Part 1 components, kept for reference.
+├── checklist_engine.py      #   main.py does not import them.
+├── validators/
+├── reporters/
+└── test_tools.py            # Exercises the Part 1 components
+```
 
-## Roadmap
+## Production use
 
-- [ ] Add more languages (Go, Rust, C#, PHP)
-- [ ] Custom rule engine
-- [ ] Integration with CI/CD
-- [ ] VSCode extension
-- [ ] HTML report generation
-- [ ] Fix suggestions with AI
-- [ ] Performance profiling
-
-## Contributing
-
-1. Add new checklist YAML files for additional technologies
-2. Extend validators for custom check types
-3. Improve detection accuracy
-4. Add framework-specific checks
+This server is a local demonstration. Before you deploy an MCP server for a team, add authentication and authorization, monitoring, persistent job state, secret storage, and tests for failures, restarts and concurrent calls. Part 2 of the blog series has the full checklist.
 
 ## License
 
