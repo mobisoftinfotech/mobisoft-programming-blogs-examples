@@ -82,7 +82,7 @@ Clicks in the UI skip the check. As a second layer, the planner's instructions t
 The trip form (`show_trip_form`) is still there for users who name no destination or ask for a form.
 Only the destination is required on it.
 
-Chapter 2 only (terminal chat, no UI):
+The same agent as plain text, without A2UI:
 
 ```bash
 cd agent && uv run travel-cli
@@ -100,12 +100,3 @@ cd client && npm test         # golden files checked by the real A2UI v1.0 Messa
 the files and the client checks them with the official renderer: they must be valid, nested templates
 must render, and templated buttons must send the right context. Regenerate them with
 `UPDATE_GOLDEN=1 uv run pytest`.
-
-## Progress
-
-- [x] Ch 1: Setup
-- [x] Ch 2: Plain-text agent with mock tools
-- [x] Ch 3: First A2UI surface (trip form) over SSE + action round-trip
-- [x] Ch 4: The agent drives the UI (`show_trip_form` tool, strict schema)
-- [x] Ch 5–8 (most of them): itinerary, hotels, booking and confirmation as A2UI, no dates needed,
-      templates + data binding, data-only refinement, `deleteSurface`
